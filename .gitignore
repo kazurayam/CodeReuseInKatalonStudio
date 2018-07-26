@@ -4,7 +4,6 @@
 # vim
 .swp
 
-## proposed by https://github.com/katalon-studio/ShadowDOMSampleProject/blob/master/.gitignore#L3
 \.classpath
 \.project
 \.settings/
