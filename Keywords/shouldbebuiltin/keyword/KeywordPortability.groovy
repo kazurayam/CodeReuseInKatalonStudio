@@ -2,12 +2,15 @@ package shouldbebuiltin.keyword
 
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.regex.Pattern
 import java.util.regex.Matcher
-import com.kms.katalon.core.configuration.RunConfiguration
-import com.kms.katalon.core.annotation.Keyword
-import org.apache.http.client.config.RequestConfig
+import java.util.regex.Pattern
+
+import org.apache.http.Header
 import org.apache.http.HttpHost
+import org.apache.http.client.config.RequestConfig
+
+import com.kms.katalon.core.annotation.Keyword
+import com.kms.katalon.core.configuration.RunConfiguration
 
 /**
  * 
@@ -16,7 +19,11 @@ import org.apache.http.HttpHost
  */
 public class KeywordPortability {
 
-	static String version_ = '0.0.1'
+	static String version = '0.0.1'
+	
+	static String getVersion() {
+		return version
+	}
 
 	@Keyword
 	static boolean includeCustomKeywords(
@@ -28,11 +35,27 @@ public class KeywordPortability {
 			throw new IllegalArgumentException("zipUrl is required")
 		}
 
-		// directory to save the zip file
-		Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
-
+		URL url = new URL(zipUrl)
 		
+		// create the helper class to download files via HTTP with Proxy awareness
+		Downloader downloader
+		if (amIBehindProxy()) {
+			downloader = new Downloader(createProxyConfig())
+		} else {
+			downloader = new Downloader()
+		}
+		
+		// make a HEAD request to the URL in order to be informed of the recommended file name
+		String contentDisposition = downloader.getContentDispositionHeader(url)
+		
+		// name of the downloaded file
+		String filename = this.getRecommendedFilename(contentDisposition)
+		
+		// we will save the downloaded zip file into this directory
+		Path zipFile = Paths.get(System.getProperty('user.home'), 'Downloads', filename)
 
+		// now download the zipFile
+		downloader.download(url, zipFile.toFile())
 
 		println "zipUrl=${zipUrl} username='${username}' password=\"${password.replaceAll('.','*')}\" packageNames=${packages}"
 		return true

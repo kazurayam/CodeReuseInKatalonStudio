@@ -19,3 +19,26 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUiBuiltInKe
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 import internal.GlobalVariable as GlobalVariable
 
+import com.kazurayam.KatalonProperties
+import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
+
+import internal.GlobalVariable as GlobalVariable
+
+/**
+ *
+ * @author kazurayam
+ *
+ */
+
+// URL of an Excel file to download (FIFA World CUP 2018 Russia, Team Japan results)
+String url = 'http://spreadsheetpage.com/index.php/file/C35/P10/'
+
+def result = CustomKeywords.'shouldbebuiltin.keyword.KeywordPortability.includeCustomKeywords'(
+	url,
+	'',
+	'',
+	[])
+
+if (result) {
+	WebUI.comment(">>> Successfully downloaded ${url}")
+}
