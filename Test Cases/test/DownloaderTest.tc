@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>TC_includeKeywords</name>
+   <name>DownloaderTest</name>
    <tag></tag>
    <comment></comment>
    <testCaseGuid>7cc77276-dff3-48df-aa25-41a77e44d99b</testCaseGuid>

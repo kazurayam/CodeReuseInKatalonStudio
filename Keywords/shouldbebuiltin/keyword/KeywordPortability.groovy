@@ -20,7 +20,7 @@ import com.kms.katalon.core.configuration.RunConfiguration
 public class KeywordPortability {
 
 	static String version = '0.0.1'
-	
+
 	static String getVersion() {
 		return version
 	}
@@ -36,7 +36,7 @@ public class KeywordPortability {
 		}
 
 		URL url = new URL(zipUrl)
-		
+
 		// create the helper class to download files via HTTP with Proxy awareness
 		Downloader downloader
 		if (amIBehindProxy()) {
@@ -44,13 +44,13 @@ public class KeywordPortability {
 		} else {
 			downloader = new Downloader()
 		}
-		
+
 		// make a HEAD request to the URL in order to be informed of the recommended file name
 		String contentDisposition = downloader.getContentDispositionHeader(url)
-		
+
 		// name of the downloaded file
 		String filename = this.getRecommendedFilename(contentDisposition)
-		
+
 		// we will save the downloaded zip file into this directory
 		Path zipFile = Paths.get(System.getProperty('user.home'), 'Downloads', filename)
 

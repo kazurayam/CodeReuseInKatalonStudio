@@ -24,6 +24,8 @@ import org.apache.http.impl.client.LaxRedirectStrategy
  */
 public class Downloader {
 
+	String version = '0.1'
+	
 	// Proxy config
 	RequestConfig requestConfig
 
@@ -35,6 +37,10 @@ public class Downloader {
 		this.requestConfig = rc
 	}
 
+	String getVersion() {
+		return this.version	
+	}
+	
 	/**
 	 * 
 	 * @param url
@@ -59,7 +65,7 @@ public class Downloader {
 			IOUtils.closeQuietly(httpclient)
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param url
@@ -78,7 +84,7 @@ public class Downloader {
 		}
 		return null
 	}
-	
+
 	/**
 	 * 
 	 * @param url
@@ -99,13 +105,13 @@ public class Downloader {
 		}
 		return null
 	}
-	
+
 	/**
-	* 
-	* @param url
-	* @param dstFile
-	* @return
-	*/
+	 * 
+	 * @param url
+	 * @param dstFile
+	 * @return
+	 */
 	public File download(URL url, File distributedFile) {
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setRedirectStrategy(new LaxRedirectStrategy())
@@ -117,7 +123,7 @@ public class Downloader {
 				get.setConfig(requestConfig)
 			}
 			File downloaded = httpclient.execute(get,
-				new FileDownloadResponseHandler(distributedFile))
+					new FileDownloadResponseHandler(distributedFile))
 			return downloaded
 		} catch (Exception e) {
 			throw new IllegalStateException(e)
@@ -135,14 +141,14 @@ public class Downloader {
 	 */
 	static class FileDownloadResponseHandler implements ResponseHandler<File> {
 		private final File target
-		
+
 		public FileDownloadResponseHandler(File target) {
 			this.target = target
 		}
-		
+
 		@Override
-		public File handleResponse(HttpResponse response) 
-				throws ClientProtocolException, IOException {
+		public File handleResponse(HttpResponse response)
+		throws ClientProtocolException, IOException {
 			InputStream source = response.getEntity().getContent()
 			FileUtils.copyInputStreamToFile(source, this.target)
 			return this.target
