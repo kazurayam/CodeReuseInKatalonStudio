@@ -1,17 +1,19 @@
-package junit.tutorial
+package junittutorial.test
 
 import static org.hamcrest.CoreMatchers.*
 import static org.junit.Assert.*
 
 import org.junit.Test
 
-class MoreCalculatorTest {
+import junittutorial.Calculator
+
+class CalculatorTest {
 
 	@Test
-	void testDivide() {
+	void testMultiply() {
 		Calculator calc = new Calculator()
-		float expected = 1.3f
-		float actual = calc.divide(3, 2)
+		int expected = 12
+		int actual = calc.multiply(3, 4)
 		assertThat(actual, is(expected))
 	}
 }

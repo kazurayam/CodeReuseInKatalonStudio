@@ -25,7 +25,7 @@ KatalonProperties props = new KatalonProperties()
 GlobalVariable.GitHubUsername = props.getProperty('GlobalVariable.GitHubUsername') ?: '?'
 GlobalVariable.GitHubPassword = props.getProperty('GlobalVariable.GitHubPassword') ?: '?'
 
-def result = CustomKeywords.'shouldbebuiltin.keyword.KeywordPortability.includeCustomKeywords'(
+def result = CustomKeywords.'codesharing.KeywordPortability.includeCustomKeywords'(
 	gitReposZip,
 	GlobalVariable.GitHubUsername,
 	GlobalVariable.GitHubPassword, 

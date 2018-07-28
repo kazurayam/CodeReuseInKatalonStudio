@@ -33,7 +33,7 @@ import internal.GlobalVariable as GlobalVariable
 // URL of an Excel file to download (FIFA World CUP 2018 Russia, Team Japan results)
 String url = 'http://spreadsheetpage.com/index.php/file/C35/P10/'
 
-def result = CustomKeywords.'shouldbebuiltin.keyword.KeywordPortability.includeCustomKeywords'(
+def result = CustomKeywords.'codesharing.KeywordPortability.includeCustomKeywords'(
 	url,
 	'',
 	'',

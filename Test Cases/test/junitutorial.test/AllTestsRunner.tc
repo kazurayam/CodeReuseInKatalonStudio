@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>TC_DownloaderTest</name>
+   <name>AllTestsRunner</name>
    <tag></tag>
    <comment></comment>
-   <testCaseGuid>d968e484-cc26-4d7b-9f9d-3a9296106565</testCaseGuid>
+   <testCaseGuid>20e691bd-d211-4bc0-8d43-8011e8a1ff29</testCaseGuid>
 </TestCaseEntity>
