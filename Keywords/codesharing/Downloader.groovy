@@ -41,7 +41,7 @@ public class Downloader {
 		this.requestConfig = rc
 	}
 
-	
+
 	/**
 	 * 
 	 * @param url
@@ -78,6 +78,7 @@ public class Downloader {
 		for (Header header : headers) {
 			HeaderElement[] elements = header.getElements()
 			for (HeaderElement he : elements) {
+				println "he.getName()=${he.getName()} name=${name}"
 				if (he.getName() == name) {
 					return header
 				}

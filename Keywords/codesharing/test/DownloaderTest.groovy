@@ -1,7 +1,9 @@
 package codesharing.test
 
 import static org.hamcrest.CoreMatchers.is
+import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertThat
+import static org.junit.Assert.assertTrue
 
 import org.junit.Before
 import org.junit.BeforeClass
@@ -11,6 +13,8 @@ import com.kazurayam.KatalonProperties
 
 import codesharing.Downloader
 import internal.GlobalVariable
+
+import org.apache.http.Header
 
 /**
  *
@@ -44,5 +48,25 @@ class DownloaderTest {
 	void testGetVersion() {
 		assertThat(Downloader.getVersion(), is('0.1'))
 	}
+
+	@Test
+	void testGetAllHeaders() {
+		Downloader downloader = new Downloader()
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip))
+		assertTrue(headers.length > 0)
+		for (Header header : headers) {
+			println "${header}"
+		}
+	}
+	
+	@Test
+	void testGetHeader() {
+		String headerName = 'Content-Disposition'
+		Downloader downloader = new Downloader()
+		Header header = downloader.getHeader(new URL(gitReposZip), headerName)
+		assertNotNull(header)
+		println "#testGetHeader ${headerName}: ${header.toString()}"
+	}
+
 
 }
