@@ -25,7 +25,7 @@ import org.apache.http.impl.client.LaxRedirectStrategy
 public class Downloader {
 
 	String version = '0.1'
-	
+
 	// Proxy config
 	RequestConfig requestConfig
 
@@ -38,9 +38,9 @@ public class Downloader {
 	}
 
 	String getVersion() {
-		return this.version	
+		return this.version
 	}
-	
+
 	/**
 	 * 
 	 * @param url
