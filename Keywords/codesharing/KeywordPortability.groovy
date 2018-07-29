@@ -19,7 +19,7 @@ import com.kms.katalon.core.configuration.RunConfiguration
  */
 public class KeywordPortability {
 
-	static String version = '0.0.1'
+	static final String version = '0.1'
 
 	static String getVersion() {
 		return version
@@ -62,7 +62,7 @@ public class KeywordPortability {
 	}
 
 	// check if I am behind Proxy or not
-	private static boolean amIBehindProxy() {
+	static boolean amIBehindProxy() {
 		def pi = RunConfiguration.getProxyInformation()
 		if (pi.proxyOption == 'MANUAL_CONFIG' &&
 		pi.proxyServerType == 'HTTP' &&
@@ -75,7 +75,7 @@ public class KeywordPortability {
 	}
 
 	// read Proxy Configuration out of Katalon Studio's config
-	private static RequestConfig createProxyConfig() {
+	static RequestConfig createProxyConfig() {
 		def pi = RunConfiguration.getProxyInformation()
 		if (pi.proxyOption == 'MANUAL_CONFIG' &&
 		pi.proxyServerType == 'HTTP' &&
@@ -97,7 +97,7 @@ public class KeywordPortability {
 	static Pattern pattern = Pattern.compile(/^attachment; filename=(.+)$/)
 
 	// get the recommended filename out of HTTP response header
-	private static String getRecommendedFilename(String contentDisposition, String defaultFilename='a.zip') {
+	static String getRecommendedFilename(String contentDisposition, String defaultFilename='a.zip') {
 		// Content-Disposition: attachment; filename=MyCustomKeywords-master.zip
 		Matcher matcher = pattern.matcher(contentDisposition)
 		if (matcher.matches()) {

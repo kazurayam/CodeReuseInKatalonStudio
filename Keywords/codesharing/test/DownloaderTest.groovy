@@ -42,8 +42,7 @@ class DownloaderTest {
 
 	@Test
 	void testGetVersion() {
-		Downloader instance = new Downloader()
-		assertThat(instance.getVersion(), is('0.1'))
+		assertThat(Downloader.getVersion(), is('0.1'))
 	}
 
 }
