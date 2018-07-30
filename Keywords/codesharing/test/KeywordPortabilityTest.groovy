@@ -61,4 +61,12 @@ class KeywordPortabilityTest {
 		instance.includeCustomKeywords(gitReposZip, '', '', myPackages, destKeywords)
 		assertTrue(Files.exists(unzippedDir))
 	}
+
+	@Test
+	void testWhichPackagesToCopy() {
+		def packages = ['com.kazurayam.ksbackyard']
+		List<Path> paths = KeywordPortability.whichPackagesToCopy(packages)
+		assertThat(paths.size(), is(1))
+		assertThat(paths[0], is(Paths.get('com', 'kazurayam', 'ksbackyard')))
+	}
 }

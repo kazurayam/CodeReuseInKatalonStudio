@@ -22,13 +22,16 @@ import org.apache.http.client.config.RequestConfig
 import com.kms.katalon.core.annotation.Keyword
 import com.kms.katalon.core.configuration.RunConfiguration
 import groovy.util.AntBuilder
-
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 /**
  * 
  * @author kazurayam
  *
  */
 public class KeywordPortability {
+
+	private static final Logger logger_ = LoggerFactory.getLogger(KeywordPortability.class)
 
 	static final String version = '0.1'
 
@@ -52,9 +55,8 @@ public class KeywordPortability {
 		List<Path> topLevelDirectories = unzip(new ZipFile(zipFile.toFile()), downloadsDir)
 		assert topLevelDirectories.size() == 1
 
-
 		/*
-		 * Here we assume that we have the following directory tree
+		 * Here we assume that we have the following directory tree extracted from the zip file
 		 *   d Downloads
 		 *     d MyCustomKeywords-0.2
 		 *       d Keywords
@@ -73,10 +75,37 @@ public class KeywordPortability {
 		// into the current Katalon Project
 		Path src = downloadsDir.resolve(topLevelDirectories[0]).resolve('Keywords')
 		Path dst = destKeywords
-		Files.createDirectories(dst)
-		copyDirectory(src, dst)
-		println "copied files from ${src} into ${dst}"
+		List<Path> packagesToCopy = whichPackagesToCopy(packages)
+		for (Path p : packagesToCopy) {
+			def s = src.resolve(p)
+			def d = dst.resolve(p)
+			Files.createDirectories(d)
+			def c = copyDirectory(s, d)
+			logger_.info("copied ${c} file${(c > 1) ? 's' : ''} from ${s} to ${d}")
+		}
 		return true
+	}
+
+	/**
+	 * 
+	 * @param packages
+	 * @return
+	 */
+	static List<Path> whichPackagesToCopy(List<String> packages) {
+		println "#whichPackagesToCopy packages=${packages}"
+		List<Path> subpaths = new ArrayList<Path>()
+		for (String pkg : packages) {
+			String[] nodes = pkg.split('\\.')     // ['com', 'kazurayam', 'ksbackyard'] as String[]
+			println "#whichPackagesToCopy nodes=${nodes}"
+			if (nodes.length > 0) {
+				Path p = Paths.get(nodes[0])
+				for (int i = 1; i < nodes.length; i++) {
+					p = p.resolve(nodes[i])
+				}
+				subpaths.add(p)
+			}
+		}
+		return subpaths
 	}
 
 	/**
@@ -119,18 +148,18 @@ public class KeywordPortability {
 		Set<String> topLevelDirectories = new HashSet<String>()
 		zip.entries().each {
 			if (it.isDirectory()) {
-				//println "it is a Directory ${it.toString()}"
+				//logger_.debug("it is a Directory ${it.toString()}")
 				topLevelDirectories.add(it.toString().split('/')[0])
 			} else {
-				//println "it is a File ${it.toString()}"
+				//logger_.debug("it is a File ${it.toString()}")
 				def fOut = outputDir.resolve(it.getName()).toFile()
 				//create output dir if not exists
 				new File(fOut.parent).mkdirs()
 				def fos = new FileOutputStream(fOut)
-				//println "name:${it.name}, size:${it.size}"
+				//logger_.debug("name:${it.name}, size:${it.size}")
 				def buf = new byte[it.getSize()]
 				def len = zip.getInputStream(it).read(buf) //println zip.getInputStream(it).text
-				//println "it.getSize()=${it.getSize()} len=${len}"
+				//logger_.debug("it.getSize()=${it.getSize()} len=${len}")
 				if (it.getSize() > 0) {
 					fos.write(buf, 0, len)
 				}
@@ -151,11 +180,11 @@ public class KeywordPortability {
 	 * Copies descendent files and directories recursively
 	 * from the source directory into the target directory.
 	 *
-	 * @param source a directory from which files and directories are copied
-	 * @param target a directory into which files and directories are copied
+	 * @param source a directory from which child files and directories are copied
+	 * @param target a directory into which child files and directories are copied
 	 * @return
 	 */
-	static boolean copyDirectory(Path source, Path target) {
+	static int copyDirectory(Path source, Path target) {
 		if (source == null) {
 			throw new IllegalArgumentException('source is null')
 		}
@@ -171,6 +200,7 @@ public class KeywordPortability {
 		if (target == null) {
 			throw new IllegalArgumentException('target is null')
 		}
+		int copyCount = 0
 		Files.walkFileTree(source, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
 				Integer.MAX_VALUE,
 				new SimpleFileVisitor<Path>() {
@@ -192,9 +222,11 @@ public class KeywordPortability {
 							Files.delete(targetFile)
 						}
 						Files.copy(file, targetFile)
+						copyCount += 1
 						return CONTINUE
 					}
 				}
 				)
+		return copyCount
 	}
 }

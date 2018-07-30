@@ -20,6 +20,8 @@ import org.apache.http.impl.client.LaxRedirectStrategy
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Downloader drives HTTP request & response to download a distribute file from a web site.
@@ -30,7 +32,9 @@ import java.util.regex.Pattern
  * https://gist.github.com/rponte/09ddc1aa7b9918b52029
  */
 public class Downloader {
-
+	
+	private static final Logger logger_ = LoggerFactory.getLogger(Downloader.class)
+	
 	static final String version = '0.1'
 
 	static String getVersion() {
@@ -111,9 +115,9 @@ public class Downloader {
 					return m.group(1)
 				}
 			}
-			println "header is ${header}, where filename=xxxx is not found"
+			logger_.info("in ${url}, header is ${header}, where filename=xxxx is not found")
 		} else {
-			println "${name} Header is not found in the response of ${url}"
+			logger_.info("in ${url}, ${name} Header is not found")
 		}
 		return null
 	}
@@ -166,7 +170,7 @@ public class Downloader {
 			HttpHost host = new HttpHost(
 					proxyServerAddress, proxyServerPort,
 					proxyServerType)
-			println "host is '${host.toString()}'"
+			logger_.debug("proxy host is '${host.toString()}'")
 			return host
 		}
 		return null
