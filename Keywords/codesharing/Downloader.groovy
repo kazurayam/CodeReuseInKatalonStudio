@@ -1,9 +1,13 @@
 package codesharing
 
+import com.kms.katalon.core.configuration.RunConfiguration
+import com.kms.katalon.core.network.ProxyInformation
+
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.apache.http.Header
 import org.apache.http.HeaderElement
+import org.apache.http.HttpHost
 import org.apache.http.HttpResponse
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.ResponseHandler
@@ -35,10 +39,10 @@ public class Downloader {
 
 	Downloader() {
 		requestConfig = null
-	}
-
-	Downloader(RequestConfig rc) {
-		this.requestConfig = rc
+		HttpHost proxy = Downloader.getProxy()
+		if (proxy != null) {
+			requestConfig = RequestConfig.custom().setProxy(proxy).build()
+		}
 	}
 
 
@@ -134,7 +138,31 @@ public class Downloader {
 		}
 	}
 
-
+	/**
+	 * If your Katalon Studio is configured with MANUAL PROXY,
+	 * then retrieve the proxy config to construct an instance of
+	 * org.apache.http.HttpHost
+	 * and return it. Otherwise return null.
+	 * 
+	 * @return
+	 */
+	static HttpHost getProxy() {
+		ProxyInformation pi = RunConfiguration.getProxyInformation()
+		String proxyOption = pi.getProxyOption()
+		String proxyServerType = pi.getProxyServerType()
+		String username = pi.getUsername()
+		String password = pi.getPassword()
+		String proxyServerAddress = pi.getProxyServerAddress()
+		int proxyServerPort = pi.getProxyServerPort()
+		if (proxyOption == 'MANUAL_CONFIG' && proxyServerType == 'HTTP') {
+			HttpHost host = new HttpHost(
+				proxyServerAddress, proxyServerPort,
+				proxyServerType)
+			println "host is '${host.toString()}'"
+			return host
+		}
+		return null
+	}
 
 	/**
 	 * 

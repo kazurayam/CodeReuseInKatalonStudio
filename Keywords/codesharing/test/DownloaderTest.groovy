@@ -1,6 +1,8 @@
 package codesharing.test
 
 import static org.hamcrest.CoreMatchers.is
+import static org.hamcrest.CoreMatchers.not
+import static org.hamcrest.CoreMatchers.nullValue
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
@@ -8,6 +10,7 @@ import static org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.junit.Ignore
 
 import com.kazurayam.KatalonProperties
 
@@ -15,6 +18,7 @@ import codesharing.Downloader
 import internal.GlobalVariable
 
 import org.apache.http.Header
+import org.apache.http.HttpHost
 
 /**
  *
@@ -50,6 +54,14 @@ class DownloaderTest {
 	}
 
 	@Test
+	void testGetProxy() {
+		HttpHost proxy = Downloader.getProxy()
+		assertThat(proxy, is( not( nullValue() ) ))
+		assertThat(proxy.getHostName(), is('172.24.2.10'))
+		assertThat(proxy.getPort(), is(8080))
+	}
+	
+	@Test
 	void testGetAllHeaders() {
 		Downloader downloader = new Downloader()
 		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip))
@@ -58,7 +70,8 @@ class DownloaderTest {
 			println "${header}"
 		}
 	}
-	
+
+	@Ignore
 	@Test
 	void testGetHeader() {
 		String headerName = 'Content-Disposition'
