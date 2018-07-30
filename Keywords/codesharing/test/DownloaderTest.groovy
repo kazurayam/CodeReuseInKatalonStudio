@@ -1,4 +1,4 @@
-package com.kazurayam.ksbackyard.codesharing.test
+package codesharing.test
 
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.not
@@ -14,7 +14,7 @@ import org.junit.Ignore
 
 import com.kazurayam.KatalonProperties
 
-import com.kazurayam.ksbackyard.codesharing.Downloader
+import codesharing.Downloader
 import internal.GlobalVariable
 
 import org.apache.http.Header

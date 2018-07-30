@@ -1,4 +1,4 @@
-package com.kazurayam.ksbackyard.codesharing.test
+package codesharing.test
 
 import org.junit.runner.RunWith
 import org.junit.runners.Suite

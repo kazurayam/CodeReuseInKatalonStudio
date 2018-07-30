@@ -3,7 +3,7 @@ import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
 import org.junit.runner.JUnitCore
 import org.junit.runner.Result
 
-import com.kazurayam.ksbackyard.codesharing.test.DownloaderTest
+import codesharing.test.DownloaderTest
 import com.kms.katalon.core.model.FailureHandling
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 

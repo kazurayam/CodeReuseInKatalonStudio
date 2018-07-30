@@ -1,4 +1,4 @@
-package com.kazurayam.ksbackyard.codesharing
+package codesharing
 
 import com.kms.katalon.core.configuration.RunConfiguration
 import com.kms.katalon.core.network.ProxyInformation
@@ -145,7 +145,7 @@ public class Downloader {
 	}
 
 	/* --------------------------------------------------------------------- */
-	
+
 	/**
 	 * If your Katalon Studio is configured with MANUAL PROXY,
 	 * then retrieve the proxy config to construct an instance of
