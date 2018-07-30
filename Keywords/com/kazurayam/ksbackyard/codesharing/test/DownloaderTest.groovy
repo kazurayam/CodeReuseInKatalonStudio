@@ -1,4 +1,4 @@
-package codesharing.test
+package com.kazurayam.ksbackyard.codesharing.test
 
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.not
@@ -14,7 +14,7 @@ import org.junit.Ignore
 
 import com.kazurayam.KatalonProperties
 
-import codesharing.Downloader
+import com.kazurayam.ksbackyard.codesharing.Downloader
 import internal.GlobalVariable
 
 import org.apache.http.Header
@@ -65,7 +65,7 @@ class DownloaderTest {
 		assertThat(proxy.getPort(), is(8080))
 	}
 
-	
+
 	@Ignore
 	@Test
 	void testGetAllHeaders() {
@@ -88,7 +88,7 @@ class DownloaderTest {
 		assertTrue(header.getValue().contains('attachment; filename=MyCustomKeywords-0.2.zip'))
 		println "#testGetHeader ${headerName}: ${header.toString()}"
 	}
-	
+
 	@Ignore
 	@Test
 	void testGetContentDispositionFilename() {

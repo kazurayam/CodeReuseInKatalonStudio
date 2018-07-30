@@ -1,4 +1,4 @@
-package codesharing
+package com.kazurayam.ksbackyard.codesharing
 
 import com.kms.katalon.core.configuration.RunConfiguration
 import com.kms.katalon.core.network.ProxyInformation

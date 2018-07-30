@@ -1,4 +1,4 @@
-package codesharing
+package com.kazurayam.ksbackyard.codesharing
 
 import java.nio.file.Path
 import java.nio.file.Paths

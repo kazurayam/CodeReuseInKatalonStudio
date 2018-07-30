@@ -4,7 +4,7 @@ import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
 import com.kms.katalon.core.model.FailureHandling
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 
-import codesharing.test.DownloaderTest
+import com.kazurayam.ksbackyard.codesharing.test.KeywordPortabilityTest
 
 /**
  * 
