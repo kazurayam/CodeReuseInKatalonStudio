@@ -57,7 +57,8 @@ class KeywordPortabilityTest {
 	@Test
 	void testIncludeCustomKeywords() {
 		KeywordPortability instance = new KeywordPortability()
-		instance.includeCustomKeywords(gitReposZip, '', '', myPackages)
+		Path destKeywords = Paths.get(System.getProperty('user.dir')).resolve('tmp').resolve('Keywords')
+		instance.includeCustomKeywords(gitReposZip, '', '', myPackages, destKeywords)
 		assertTrue(Files.exists(unzippedDir))
 	}
 }

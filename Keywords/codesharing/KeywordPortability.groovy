@@ -41,7 +41,8 @@ public class KeywordPortability {
 			String zipUrl,
 			String username='',
 			String password='',
-			List<String> packages=[]) {
+			List<String> packages=[],
+			Path destKeywords=Paths.get(System.getProperty('user.dir')).resolve('Keywords')) {
 
 		// download the zip file from the given URL into the Downloads dir
 		Path zipFile = downloadZip(zipUrl, username, password)
@@ -71,7 +72,8 @@ public class KeywordPortability {
 		// from the downloaded archive
 		// into the current Katalon Project
 		Path src = downloadsDir.resolve(topLevelDirectories[0]).resolve('Keywords')
-		Path dst = Paths.get(System.getProperty('user.dir')).resolve('Keywords')
+		Path dst = destKeywords
+		Files.createDirectories(dst)
 		copyDirectory(src, dst)
 		println "copied files from ${src} into ${dst}"
 		return true
@@ -104,9 +106,9 @@ public class KeywordPortability {
 
 		return zipFile.toPath()
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param zipFile
@@ -170,29 +172,29 @@ public class KeywordPortability {
 			throw new IllegalArgumentException('target is null')
 		}
 		Files.walkFileTree(source, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
-			Integer.MAX_VALUE,
-			new SimpleFileVisitor<Path>() {
-				@Override
-				FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attr) throws IOException {
-					Path targetdir = target.resolve(source.relativize(dir))
-					try {
-						Files.copy(dir, targetdir)
-					} catch (FileAlreadyExistsException e) {
-						if (!Files.isDirectory(targetdir))
-							throw e
+				Integer.MAX_VALUE,
+				new SimpleFileVisitor<Path>() {
+					@Override
+					FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attr) throws IOException {
+						Path targetdir = target.resolve(source.relativize(dir))
+						try {
+							Files.copy(dir, targetdir)
+						} catch (FileAlreadyExistsException e) {
+							if (!Files.isDirectory(targetdir))
+								throw e
+						}
+						return CONTINUE
 					}
-					return CONTINUE
-				}
-				@Override
-				FileVisitResult visitFile(Path file, BasicFileAttributes attr) throws IOException {
-					Path targetFile = target.resolve(source.relativize(file))
-					if (Files.exists(targetFile)) {
-						Files.delete(targetFile)
+					@Override
+					FileVisitResult visitFile(Path file, BasicFileAttributes attr) throws IOException {
+						Path targetFile = target.resolve(source.relativize(file))
+						if (Files.exists(targetFile)) {
+							Files.delete(targetFile)
+						}
+						Files.copy(file, targetFile)
+						return CONTINUE
 					}
-					Files.copy(file, targetFile)
-					return CONTINUE
 				}
-			}
-		)
+				)
 	}
 }
