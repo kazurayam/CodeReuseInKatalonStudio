@@ -144,6 +144,8 @@ public class Downloader {
 		}
 	}
 
+	/* --------------------------------------------------------------------- */
+	
 	/**
 	 * If your Katalon Studio is configured with MANUAL PROXY,
 	 * then retrieve the proxy config to construct an instance of

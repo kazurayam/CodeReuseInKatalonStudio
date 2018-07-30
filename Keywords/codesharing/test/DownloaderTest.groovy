@@ -20,6 +20,9 @@ import internal.GlobalVariable
 import org.apache.http.Header
 import org.apache.http.HttpHost
 
+import java.nio.file.Path
+import java.nio.file.Paths
+
 /**
  *
  * @author kazurayam
@@ -86,6 +89,7 @@ class DownloaderTest {
 		println "#testGetHeader ${headerName}: ${header.toString()}"
 	}
 	
+	@Ignore
 	@Test
 	void testGetContentDispositionFilename() {
 		String headerName = 'Content-Disposition'
@@ -96,5 +100,15 @@ class DownloaderTest {
 		assertThat(filename, is('MyCustomKeywords-0.2.zip'))
 	}
 
+	@Test
+	void testDownload() {
+		Downloader downloader = new Downloader()
+		String filename = downloader.getContentDispositionFilename(new URL(gitReposZip))
+		Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
+		File downloadedFile = downloadsDir.resolve(filename).toFile()
+		downloader.download(new URL(gitReposZip), downloadedFile)
+		assertTrue(downloadedFile.exists())
+		assertTrue(downloadedFile.length() > 0)
+	}
 
 }
