@@ -47,12 +47,13 @@ class DownloaderTest {
 		GlobalVariable.GitHubPassword = props.getProperty("GlobalVariable.GitHubPassword") ?: "?"
 	}
 
-
+	@Ignore
 	@Test
 	void testGetVersion() {
 		assertThat(Downloader.getVersion(), is('0.1'))
 	}
 
+	@Ignore
 	@Test
 	void testGetProxy() {
 		HttpHost proxy = Downloader.getProxy()
@@ -60,14 +61,16 @@ class DownloaderTest {
 		assertThat(proxy.getHostName(), is('172.24.2.10'))
 		assertThat(proxy.getPort(), is(8080))
 	}
+
 	
+	@Ignore
 	@Test
 	void testGetAllHeaders() {
 		Downloader downloader = new Downloader()
 		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip))
 		assertTrue(headers.length > 0)
 		for (Header header : headers) {
-			println "${header}"
+			println "#testGetAllHeaders ${header}"
 		}
 	}
 
@@ -78,7 +81,19 @@ class DownloaderTest {
 		Downloader downloader = new Downloader()
 		Header header = downloader.getHeader(new URL(gitReposZip), headerName)
 		assertNotNull(header)
+		assertThat(header.getName(), is(headerName))
+		assertTrue(header.getValue().contains('attachment; filename=MyCustomKeywords-0.2.zip'))
 		println "#testGetHeader ${headerName}: ${header.toString()}"
+	}
+	
+	@Test
+	void testGetContentDispositionFilename() {
+		String headerName = 'Content-Disposition'
+		Downloader downloader = new Downloader()
+		String filename = downloader.getContentDispositionFilename(new URL(gitReposZip))
+		println "#testGetContentDispositionFilename filename is ${filename}"
+		assertNotNull(filename)
+		assertThat(filename, is('MyCustomKeywords-0.2.zip'))
 	}
 
 

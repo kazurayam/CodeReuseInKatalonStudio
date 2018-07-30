@@ -6,7 +6,8 @@ import org.junit.runners.Suite.SuiteClasses
 
 @RunWith(Suite.class)
 @SuiteClasses([
-	DownloaderTest.class, KeywordPortabilityTest.class
+	DownloaderTest.class,
+	KeywordPortabilityTest.class
 ])
 // please note.
 // In Java, this will be written as @SuiteClasses({...}).

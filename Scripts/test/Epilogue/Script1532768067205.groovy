@@ -10,8 +10,8 @@ StringBuilder sb = new StringBuilder()
 List<Failure> failures = result.getFailures()
 for (Failure failure : failures) {
 	sb.append(failure.getDescription().getDisplayName() + "\n")
-	sb.append(failure.getMessage() + "\n")
-	//sb.append(failure.getTrace() + "\n")
+	//sb.append(failure.getMessage() + "\n")
+	sb.append(failure.getTrace() + "\n")
 	sb.append('-' * 80)
 }
 WebUI.comment(sb.toString())

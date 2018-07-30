@@ -18,6 +18,9 @@ import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.impl.client.LaxRedirectStrategy
 
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 /**
  * Downloader drives HTTP request & response to download a distribute file from a web site.
  * Downloader is Proxy aware, but the caller need to pass the Proxy config to the constructor.
@@ -80,32 +83,35 @@ public class Downloader {
 	public Header getHeader(URL url, String name) {
 		Header[] headers = this.getAllHeaders(url)
 		for (Header header : headers) {
-			HeaderElement[] elements = header.getElements()
-			for (HeaderElement he : elements) {
-				println "he.getName()=${he.getName()} name=${name}"
-				if (he.getName() == name) {
-					return header
-				}
+			if (header.getName() == name) {
+				return header
 			}
 		}
 		return null
 	}
 
 	/**
+	 * Provided that the url reponds with a HTTP Header
+	 *   Content-Disposition: attachment; filename=MyCustomKeywords-0.2.zip
+	 * then returns a String
+	 *   MyCustomKeywords-0.2.zip
 	 * 
 	 * @param url
 	 * @return
 	 */
-	public String getContentDispositionHeader(URL url) {
-		String name = 'Content-Disposition'
-		Header header = this.getHeader(url, name)
+	static Pattern ptn = Pattern.compile(/filename=([\S]+)$/)
+
+	public String getContentDispositionFilename(URL url) {
+		Header header = this.getHeader(url, 'Content-Disposition')
 		if (header != null) {
 			HeaderElement[] elements = header.getElements()
 			for (HeaderElement he : elements) {
-				if (he.getName() == name) {
-					return he.getValue()
+				Matcher m = ptn.matcher(he.toString())
+				if (m.find()) {
+					return m.group(1)
 				}
 			}
+			println "header is ${header}, where filename=xxxx is not found"
 		} else {
 			println "${name} Header is not found in the response of ${url}"
 		}
@@ -156,8 +162,8 @@ public class Downloader {
 		int proxyServerPort = pi.getProxyServerPort()
 		if (proxyOption == 'MANUAL_CONFIG' && proxyServerType == 'HTTP') {
 			HttpHost host = new HttpHost(
-				proxyServerAddress, proxyServerPort,
-				proxyServerType)
+					proxyServerAddress, proxyServerPort,
+					proxyServerType)
 			println "host is '${host.toString()}'"
 			return host
 		}
