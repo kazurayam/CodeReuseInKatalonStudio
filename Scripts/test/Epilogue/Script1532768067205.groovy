@@ -13,6 +13,7 @@ for (Failure failure : failures) {
 	//sb.append(failure.getMessage() + "\n")
 	sb.append(failure.getTrace() + "\n")
 	sb.append('-' * 80)
+	sb.append("\n")
 }
 WebUI.comment(sb.toString())
 

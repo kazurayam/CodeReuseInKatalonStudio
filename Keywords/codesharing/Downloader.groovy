@@ -64,7 +64,7 @@ public class Downloader {
 	 * @param credentials
 	 * @return
 	 */
-	private CloseableHttpClient makeHttpClient(URL url, Credentials credentials) {
+	private static CloseableHttpClient makeHttpClient(URL url, Credentials credentials) {
 		if (url == null) {
 			throw new IllegalArgumentException("url is required")
 		}
@@ -83,7 +83,7 @@ public class Downloader {
 	 * @return
 	 */
 	public Header[] getAllHeaders(URL url, Credentials credentials) {
-		CloseableHttpClient httpclient = makeHttpClient(url, credentials)		
+		CloseableHttpClient httpclient = makeHttpClient(url, credentials)
 		try {
 			HttpHead head = new HttpHead(url.toURI())
 			if (this.requestConfig != null) {
@@ -116,6 +116,9 @@ public class Downloader {
 		return null
 	}
 
+	public String getHttpStatus(Header[] headers) {
+		return this.getHeader(headers, 'Status')
+	}
 
 	/**
 	 * Provided that the url reponds with a HTTP Header

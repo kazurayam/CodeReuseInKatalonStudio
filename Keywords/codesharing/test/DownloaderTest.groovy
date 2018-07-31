@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.CoreMatchers.nullValue
 import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
 
@@ -51,15 +52,17 @@ class DownloaderTest {
 		// override GlobalVariables with value loaded from the %USERPROFILE%\katalon.properties file
 		GlobalVariable.GithubUsername = props.getProperty("GlobalVariable.GithubUsername") ?: ''
 		GlobalVariable.GithubPassword = props.getProperty("GlobalVariable.GithubPassword") ?: ''
+		//println "GlobalVariable.GithubUsername is '${GlobalVariable.GithubUsername}'"
+		//println "GlobalVariable.GithubPassword is '${GlobalVariable.GithubPassword}'"
 	}
 
-	
+
 	@Test
 	void testGetVersion() {
 		assertThat(Downloader.getVersion(), is('0.1'))
 	}
 
-	@Ignore
+	
 	@Test
 	void testGetProxy() {
 		HttpHost proxy = Downloader.getProxy()
@@ -71,19 +74,30 @@ class DownloaderTest {
 
 	
 	@Test
-	void testGetAllHeaders() {
+	void testGetAllHeaders_public() {
 		Downloader downloader = new Downloader()
 		Credentials credentials = new UsernamePasswordCredentials('', '')
 		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_public), credentials)
 		assertTrue(headers.length > 0)
 		for (Header header : headers) {
-			println "#testGetAllHeaders ${header}"
+			println "#testGetAllHeaders_public ${header}"
+		}
+	}
+	
+	@Test
+	void testGetAllHeaders_private() {
+		Downloader downloader = new Downloader()
+		Credentials credentials = new UsernamePasswordCredentials(GlobalVariable.GithubUsername, GlobalVariable.GithubPassword)
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_private), credentials)
+		assertTrue(headers.length > 0)
+		for (Header header : headers) {
+			println "#testGetAllHeaders_private ${header}"
 		}
 	}
 
 	
 	@Test
-	void testGetHeader() {
+	void testGetHeader_public() {
 		String headerName = 'Content-Disposition'
 		Downloader downloader = new Downloader()
 		Credentials cred = new UsernamePasswordCredentials('', '')
@@ -92,24 +106,48 @@ class DownloaderTest {
 		assertNotNull(header)
 		assertThat(header.getName(), is(headerName))
 		assertTrue(header.getValue().contains('attachment; filename=MyCustomKeywords-0.2.zip'))
-		println "#testGetHeader ${headerName}: ${header.toString()}"
+		println "#testGetHeader_public ${headerName}: ${header.toString()}"
+	}
+	
+	@Test
+	void testGetHeader_private() {
+		String headerName = 'Content-Disposition'
+		Downloader downloader = new Downloader()
+		Credentials cred = new UsernamePasswordCredentials(GlobalVariable.GithubUsername, GlobalVariable.GithubPassword)
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_private), cred)
+		Header header = downloader.getHeader(headers, headerName)
+		// Content-Disposition may not be found
+		assertNull("in ${gitReposZip_private} Content-Dispostion header is not expected to be present")
 	}
 
 	
 	@Test
-	void testGetContentDispositionFilename() {
+	void testGetContentDispositionFilename_public() {
 		String headerName = 'Content-Disposition'
 		Downloader downloader = new Downloader()
 		Credentials cred = new UsernamePasswordCredentials('', '')
 		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_public), cred)
 		String filename = downloader.getContentDispositionFilename(headers)
-		println "#testGetContentDispositionFilename filename is ${filename}"
+		println "#testGetContentDispositionFilename_public filename is ${filename}"
+		assertNotNull(filename)
+		assertThat(filename, is('MyCustomKeywords-0.2.zip'))
+	}
+	
+	@Test
+	void testGetContentDispositionFilename_private() {
+		String headerName = 'Content-Disposition'
+		Downloader downloader = new Downloader()
+		Credentials cred = new UsernamePasswordCredentials(GlobalVariable.GithubUsername, GlobalVariable.GithubPassword)
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_private), cred)
+		String filename = downloader.getContentDispositionFilename(headers)
+		println "#testGetContentDispositionFilename_private filename is ${filename}"
 		assertNotNull(filename)
 		assertThat(filename, is('MyCustomKeywords-0.2.zip'))
 	}
 
+	
 	@Test
-	void testDownload() {
+	void testDownload_public() {
 		Downloader downloader = new Downloader()
 		Credentials cred = new UsernamePasswordCredentials('', '')
 		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_public), cred)
@@ -121,6 +159,7 @@ class DownloaderTest {
 		assertTrue(downloadedFile.length() > 0)
 	}
 
+	
 	@Test
 	void testDownload_private() {
 		Downloader downloader = new Downloader()
