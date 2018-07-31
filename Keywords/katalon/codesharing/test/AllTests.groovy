@@ -1,4 +1,4 @@
-package codesharing.test
+package katalon.codesharing.test
 
 import org.junit.runner.RunWith
 import org.junit.runners.Suite

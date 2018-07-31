@@ -1,4 +1,4 @@
-package codesharing
+package katalon.codesharing
 
 import com.kms.katalon.core.configuration.RunConfiguration
 import com.kms.katalon.core.network.ProxyInformation
@@ -28,6 +28,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
 
 /**
  * Downloader drives HTTP request & response to download a distribute file from a web site.

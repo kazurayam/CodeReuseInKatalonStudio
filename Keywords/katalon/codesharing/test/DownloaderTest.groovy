@@ -1,4 +1,4 @@
-package codesharing.test
+package katalon.codesharing.test
 
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.not
@@ -15,7 +15,7 @@ import org.junit.Ignore
 
 import com.kazurayam.KatalonProperties
 
-import codesharing.Downloader
+import katalon.codesharing.Downloader
 import internal.GlobalVariable
 
 import org.apache.http.Header
@@ -62,7 +62,7 @@ class DownloaderTest {
 		assertThat(Downloader.getVersion(), is('0.1'))
 	}
 
-	
+
 	@Test
 	void testGetProxy() {
 		HttpHost proxy = Downloader.getProxy()
@@ -72,7 +72,7 @@ class DownloaderTest {
 	}
 
 
-	
+
 	@Test
 	void testGetAllHeaders_public() {
 		Downloader downloader = new Downloader()
@@ -83,7 +83,7 @@ class DownloaderTest {
 			println "#testGetAllHeaders_public ${header}"
 		}
 	}
-	
+
 	@Test
 	void testGetAllHeaders_private() {
 		Downloader downloader = new Downloader()
@@ -95,7 +95,7 @@ class DownloaderTest {
 		}
 	}
 
-	
+
 	@Test
 	void testGetHeader_public() {
 		String headerName = 'Content-Disposition'
@@ -108,7 +108,7 @@ class DownloaderTest {
 		assertTrue(header.getValue().contains('attachment; filename=MyCustomKeywords-0.2.zip'))
 		println "#testGetHeader_public ${headerName}: ${header.toString()}"
 	}
-	
+
 	@Test
 	void testGetHeader_private() {
 		String headerName = 'Content-Disposition'
@@ -120,7 +120,7 @@ class DownloaderTest {
 		assertNull("in ${gitReposZip_private} Content-Dispostion header is not expected to be present")
 	}
 
-	
+
 	@Test
 	void testGetContentDispositionFilename_public() {
 		String headerName = 'Content-Disposition'
@@ -132,7 +132,7 @@ class DownloaderTest {
 		assertNotNull(filename)
 		assertThat(filename, is('MyCustomKeywords-0.2.zip'))
 	}
-	
+
 	@Test
 	void testGetContentDispositionFilename_private() {
 		String headerName = 'Content-Disposition'
@@ -145,7 +145,7 @@ class DownloaderTest {
 		assertThat(filename, is('MyCustomKeywords-0.2.zip'))
 	}
 
-	
+
 	@Test
 	void testDownload_public() {
 		Downloader downloader = new Downloader()
@@ -159,7 +159,7 @@ class DownloaderTest {
 		assertTrue(downloadedFile.length() > 0)
 	}
 
-	
+
 	@Test
 	void testDownload_private() {
 		Downloader downloader = new Downloader()

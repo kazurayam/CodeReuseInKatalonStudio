@@ -1,4 +1,4 @@
-package codesharing
+package katalon.codesharing
 
 import static java.nio.file.FileVisitResult.CONTINUE
 import java.nio.file.attribute.BasicFileAttributes
@@ -26,6 +26,7 @@ import com.kms.katalon.core.configuration.RunConfiguration
 import groovy.util.AntBuilder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
 /**
  * 
  * @author kazurayam

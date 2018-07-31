@@ -1,4 +1,4 @@
-package codesharing.test
+package katalon.codesharing.test
 
 import static org.hamcrest.CoreMatchers.is
 import static org.junit.Assert.assertThat
@@ -14,7 +14,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.Ignore
 
-import codesharing.KeywordPortability
+import katalon.codesharing.KeywordPortability
 
 import org.apache.commons.io.FileUtils
 
