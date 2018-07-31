@@ -16,6 +16,7 @@ import org.junit.Ignore
 
 import codesharing.KeywordPortability
 
+import org.apache.commons.io.FileUtils
 
 
 /**
@@ -29,8 +30,9 @@ class KeywordPortabilityTest {
 	// tag stands for version of artifacts developed by the MyCustomKeywords project
 	static String tagOfMyCustomKeywords = '0.2'
 
-	// URL of the zip file of the MyCustomKeywords project
-	static String gitReposZip = "https://github.com/kazurayam/MyCustomKeywords/archive/${tagOfMyCustomKeywords}.zip"
+	// URL of the zip file of projects on the GitHub
+	static String gitReposZip_public = "https://github.com/kazurayam/MyCustomKeywords/archive/${tagOfMyCustomKeywords}.zip"
+	static String gitReposZip_private = "https://github.com/kazurayam/HappyMigrationSiteTest/archive/master.zip"
 
 	static List<String> myPackages = ['com.kazurayam.ksbackyard']
 
@@ -55,10 +57,21 @@ class KeywordPortabilityTest {
 	}
 
 	@Test
-	void testIncludeCustomKeywords() {
+	void testIncludeCustomKeywords_public() {
 		KeywordPortability instance = new KeywordPortability()
-		Path destKeywords = Paths.get(System.getProperty('user.dir')).resolve('tmp').resolve('Keywords')
-		instance.includeCustomKeywords(gitReposZip, '', '', myPackages, destKeywords)
+		Path destKeywords = Paths.get(System.getProperty('user.dir')).resolve('tmp').resolve('Keywords_testIncludeCustomKeywords_public')
+		FileUtils.deleteDirectory(destKeywords.toFile())
+		instance.includeCustomKeywords(gitReposZip_public, '', '', myPackages, destKeywords)
+		assertTrue(Files.exists(unzippedDir))
+	}
+
+	@Ignore
+	@Test
+	void testIncludeCustomKeywords_private() {
+		KeywordPortability instance = new KeywordPortability()
+		Path destKeywords = Paths.get(System.getProperty('user.dir')).resolve('tmp').resolve('Keywords_testIncludeCustomKeywords_private')
+		FileUtils.deleteDirectory(destKeywords.toFile())
+		instance.includeCustomKeywords(gitReposZip_private, '', '', myPackages, destKeywords)
 		assertTrue(Files.exists(unzippedDir))
 	}
 

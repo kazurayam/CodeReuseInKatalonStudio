@@ -19,6 +19,8 @@ import internal.GlobalVariable
 
 import org.apache.http.Header
 import org.apache.http.HttpHost
+import org.apache.http.auth.Credentials
+import org.apache.http.auth.UsernamePasswordCredentials
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -70,7 +72,8 @@ class DownloaderTest {
 	@Test
 	void testGetAllHeaders() {
 		Downloader downloader = new Downloader()
-		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip))
+		Credentials credentials = new UsernamePasswordCredentials('', '')
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip), credentials)
 		assertTrue(headers.length > 0)
 		for (Header header : headers) {
 			println "#testGetAllHeaders ${header}"
@@ -82,7 +85,9 @@ class DownloaderTest {
 	void testGetHeader() {
 		String headerName = 'Content-Disposition'
 		Downloader downloader = new Downloader()
-		Header header = downloader.getHeader(new URL(gitReposZip), headerName)
+		Credentials cred = new UsernamePasswordCredentials('', '')
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip), cred)
+		Header header = downloader.getHeader(headers, headerName)
 		assertNotNull(header)
 		assertThat(header.getName(), is(headerName))
 		assertTrue(header.getValue().contains('attachment; filename=MyCustomKeywords-0.2.zip'))
@@ -94,7 +99,9 @@ class DownloaderTest {
 	void testGetContentDispositionFilename() {
 		String headerName = 'Content-Disposition'
 		Downloader downloader = new Downloader()
-		String filename = downloader.getContentDispositionFilename(new URL(gitReposZip))
+		Credentials cred = new UsernamePasswordCredentials('', '')
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip), cred)
+		String filename = downloader.getContentDispositionFilename(headers)
 		println "#testGetContentDispositionFilename filename is ${filename}"
 		assertNotNull(filename)
 		assertThat(filename, is('MyCustomKeywords-0.2.zip'))
@@ -103,10 +110,12 @@ class DownloaderTest {
 	@Test
 	void testDownload() {
 		Downloader downloader = new Downloader()
-		String filename = downloader.getContentDispositionFilename(new URL(gitReposZip))
+		Credentials cred = new UsernamePasswordCredentials('', '')
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip), cred)
+		String filename = downloader.getContentDispositionFilename(headers)
 		Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
 		File downloadedFile = downloadsDir.resolve(filename).toFile()
-		downloader.download(new URL(gitReposZip), downloadedFile)
+		downloader.download(new URL(gitReposZip), cred, downloadedFile)
 		assertTrue(downloadedFile.exists())
 		assertTrue(downloadedFile.length() > 0)
 	}

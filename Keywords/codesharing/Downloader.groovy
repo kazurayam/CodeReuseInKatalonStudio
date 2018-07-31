@@ -9,6 +9,8 @@ import org.apache.http.Header
 import org.apache.http.HeaderElement
 import org.apache.http.HttpHost
 import org.apache.http.HttpResponse
+import org.apache.http.auth.Credentials
+import org.apache.http.auth.UsernamePasswordCredentials
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.ResponseHandler
 import org.apache.http.client.config.RequestConfig
@@ -32,9 +34,9 @@ import org.slf4j.LoggerFactory
  * https://gist.github.com/rponte/09ddc1aa7b9918b52029
  */
 public class Downloader {
-	
+
 	private static final Logger logger_ = LoggerFactory.getLogger(Downloader.class)
-	
+
 	static final String version = '0.1'
 
 	static String getVersion() {
@@ -58,7 +60,7 @@ public class Downloader {
 	 * @param url
 	 * @return
 	 */
-	public Header[] getAllHeaders(URL url) {
+	public Header[] getAllHeaders(URL url, Credentials credentials) {
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setRedirectStrategy(new LaxRedirectStrategy())
 				.build()
@@ -78,21 +80,22 @@ public class Downloader {
 		}
 	}
 
+
 	/**
 	 * 
 	 * @param url
 	 * @param name
 	 * @return
 	 */
-	public Header getHeader(URL url, String name) {
-		Header[] headers = this.getAllHeaders(url)
+	public Header getHeader(Header[] headers, String headerName) {
 		for (Header header : headers) {
-			if (header.getName() == name) {
+			if (header.getName() == headerName) {
 				return header
 			}
 		}
 		return null
 	}
+
 
 	/**
 	 * Provided that the url reponds with a HTTP Header
@@ -105,8 +108,10 @@ public class Downloader {
 	 */
 	static Pattern ptn = Pattern.compile(/filename=([\S]+)$/)
 
-	public String getContentDispositionFilename(URL url) {
-		Header header = this.getHeader(url, 'Content-Disposition')
+
+	public String getContentDispositionFilename(Header[] headers) {
+		def headerName = 'Content-Disposition'
+		Header header = this.getHeader(headers, headerName)
 		if (header != null) {
 			HeaderElement[] elements = header.getElements()
 			for (HeaderElement he : elements) {
@@ -115,9 +120,9 @@ public class Downloader {
 					return m.group(1)
 				}
 			}
-			logger_.info("in ${url}, header is ${header}, where filename=xxxx is not found")
+			logger_.info("in ${header}, where filename=xxxx is not found")
 		} else {
-			logger_.info("in ${url}, ${name} Header is not found")
+			logger_.info("in ${headers}, ${headerName} Header is not found")
 		}
 		return null
 	}
@@ -128,7 +133,7 @@ public class Downloader {
 	 * @param dstFile
 	 * @return
 	 */
-	public File download(URL url, File distributedFile) {
+	public File download(URL url, Credentials credentials, File distributedFile) {
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setRedirectStrategy(new LaxRedirectStrategy())
 				.build()

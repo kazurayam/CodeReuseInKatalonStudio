@@ -17,6 +17,8 @@ import java.util.zip.ZipFile
 
 import org.apache.http.Header
 import org.apache.http.HttpHost
+import org.apache.http.auth.Credentials
+import org.apache.http.auth.UsernamePasswordCredentials
 import org.apache.http.client.config.RequestConfig
 
 import com.kms.katalon.core.annotation.Keyword
@@ -42,13 +44,15 @@ public class KeywordPortability {
 	@Keyword
 	static boolean includeCustomKeywords(
 			String zipUrl,
-			String username='',
-			String password='',
+			String username,
+			String password,
 			List<String> packages=[],
 			Path destKeywords=Paths.get(System.getProperty('user.dir')).resolve('Keywords')) {
 
 		// download the zip file from the given URL into the Downloads dir
-		Path zipFile = downloadZip(zipUrl, username, password)
+		URL url = new URL(zipUrl)
+		Credentials credentials = new UsernamePasswordCredentials(username, password)
+		Path zipFile = downloadZip(url, credentials)
 
 		// unzip the downloaded zip file into the Downloads dir
 		Path downloadsDir = zipFile.getParent()
@@ -86,56 +90,36 @@ public class KeywordPortability {
 		return true
 	}
 
-	/**
-	 * 
-	 * @param packages
-	 * @return
-	 */
-	static List<Path> whichPackagesToCopy(List<String> packages) {
-		println "#whichPackagesToCopy packages=${packages}"
-		List<Path> subpaths = new ArrayList<Path>()
-		for (String pkg : packages) {
-			String[] nodes = pkg.split('\\.')     // ['com', 'kazurayam', 'ksbackyard'] as String[]
-			println "#whichPackagesToCopy nodes=${nodes}"
-			if (nodes.length > 0) {
-				Path p = Paths.get(nodes[0])
-				for (int i = 1; i < nodes.length; i++) {
-					p = p.resolve(nodes[i])
-				}
-				subpaths.add(p)
-			}
-		}
-		return subpaths
-	}
 
 	/**
 	 * 
 	 * @param zipUrl
 	 * @return
 	 */
-	static Path downloadZip(String zipUrl, String username='', String password='') {
+	static Path downloadZip(URL zipUrl, Credentials credentials) {
 		if (zipUrl == null) {
 			throw new IllegalArgumentException("zipUrl is required")
 		}
 
-		URL url = new URL(zipUrl)
-
-		// create the helper class to download files via HTTP with Proxy awareness
 		Downloader downloader = new Downloader()
 
-		// make a HEAD request to the URL in order to be informed of the recommended file name
-		String filename = downloader.getContentDispositionFilename(url)
-
-		// we will save the downloaded zip file into this directory
-		Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
-		File zipFile = downloadsDir.resolve(filename).toFile()
-
-		// now download the zipFile
-		downloader.download(url, zipFile)
-
-		return zipFile.toPath()
+		// make a HEAD request to the URL in order to find recommended file name
+		Header[] headers = downloader.getAllHeaders(zipUrl, credentials)
+		if (headers != null) {
+			// we will save the downloaded zip file into this directory
+			Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
+			String filename = downloader.getContentDispositionFilename(headers)
+			if (filename == null) {
+				filename = this.getClass().getName() + '.zip'
+			}
+			File zipFile = downloadsDir.resolve(filename).toFile()
+			// now download the zipFile
+			downloader.download(zipUrl, credentials, zipFile)
+			return zipFile.toPath()
+		} else {
+			throw new IllegalStateException("HEAD ${zipUrl} failed")
+		}
 	}
-
 
 
 	/**
@@ -182,7 +166,7 @@ public class KeywordPortability {
 	 *
 	 * @param source a directory from which child files and directories are copied
 	 * @param target a directory into which child files and directories are copied
-	 * @return
+	 * @return number of regular files copied
 	 */
 	static int copyDirectory(Path source, Path target) {
 		if (source == null) {
@@ -228,5 +212,27 @@ public class KeywordPortability {
 				}
 				)
 		return copyCount
+	}
+
+	/**
+	 *
+	 * @param packages
+	 * @return
+	 */
+	static List<Path> whichPackagesToCopy(List<String> packages) {
+		println "#whichPackagesToCopy packages=${packages}"
+		List<Path> subpaths = new ArrayList<Path>()
+		for (String pkg : packages) {
+			String[] nodes = pkg.split('\\.')     // ['com', 'kazurayam', 'ksbackyard'] as String[]
+			println "#whichPackagesToCopy nodes=${nodes}"
+			if (nodes.length > 0) {
+				Path p = Paths.get(nodes[0])
+				for (int i = 1; i < nodes.length; i++) {
+					p = p.resolve(nodes[i])
+				}
+				subpaths.add(p)
+			}
+		}
+		return subpaths
 	}
 }
