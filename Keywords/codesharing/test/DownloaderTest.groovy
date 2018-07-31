@@ -37,7 +37,8 @@ class DownloaderTest {
 	static String tagOfMyCustomKeywords = '0.2'
 
 	// URL of the zip file of the MyCustomKeywords project
-	static String gitReposZip = "https://github.com/kazurayam/MyCustomKeywords/archive/${tagOfMyCustomKeywords}.zip"
+	static String gitReposZip_public = "https://github.com/kazurayam/MyCustomKeywords/archive/${tagOfMyCustomKeywords}.zip"
+	static String gitReposZip_private = "https://github.com/kazurayam/HappyMigrationSiteTest/archive/master.zip"
 
 	// package name of custom keywords to be included into this project
 	static String[] myPackages = ['com.kazurayam.ksbackyard']
@@ -48,11 +49,11 @@ class DownloaderTest {
 		// the KatalonProperties class is contained in MultiSourcedProperites-*.jar registered in the Project's External Libraries
 		KatalonProperties props = new KatalonProperties()
 		// override GlobalVariables with value loaded from the %USERPROFILE%\katalon.properties file
-		GlobalVariable.GitHubUsername = props.getProperty("GlobalVariable.GitHubUsername") ?: "?"
-		GlobalVariable.GitHubPassword = props.getProperty("GlobalVariable.GitHubPassword") ?: "?"
+		GlobalVariable.GithubUsername = props.getProperty("GlobalVariable.GithubUsername") ?: ''
+		GlobalVariable.GithubPassword = props.getProperty("GlobalVariable.GithubPassword") ?: ''
 	}
 
-	@Ignore
+	
 	@Test
 	void testGetVersion() {
 		assertThat(Downloader.getVersion(), is('0.1'))
@@ -68,25 +69,25 @@ class DownloaderTest {
 	}
 
 
-	@Ignore
+	
 	@Test
 	void testGetAllHeaders() {
 		Downloader downloader = new Downloader()
 		Credentials credentials = new UsernamePasswordCredentials('', '')
-		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip), credentials)
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_public), credentials)
 		assertTrue(headers.length > 0)
 		for (Header header : headers) {
 			println "#testGetAllHeaders ${header}"
 		}
 	}
 
-	@Ignore
+	
 	@Test
 	void testGetHeader() {
 		String headerName = 'Content-Disposition'
 		Downloader downloader = new Downloader()
 		Credentials cred = new UsernamePasswordCredentials('', '')
-		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip), cred)
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_public), cred)
 		Header header = downloader.getHeader(headers, headerName)
 		assertNotNull(header)
 		assertThat(header.getName(), is(headerName))
@@ -94,13 +95,13 @@ class DownloaderTest {
 		println "#testGetHeader ${headerName}: ${header.toString()}"
 	}
 
-	@Ignore
+	
 	@Test
 	void testGetContentDispositionFilename() {
 		String headerName = 'Content-Disposition'
 		Downloader downloader = new Downloader()
 		Credentials cred = new UsernamePasswordCredentials('', '')
-		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip), cred)
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_public), cred)
 		String filename = downloader.getContentDispositionFilename(headers)
 		println "#testGetContentDispositionFilename filename is ${filename}"
 		assertNotNull(filename)
@@ -111,13 +112,31 @@ class DownloaderTest {
 	void testDownload() {
 		Downloader downloader = new Downloader()
 		Credentials cred = new UsernamePasswordCredentials('', '')
-		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip), cred)
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_public), cred)
 		String filename = downloader.getContentDispositionFilename(headers)
 		Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
 		File downloadedFile = downloadsDir.resolve(filename).toFile()
-		downloader.download(new URL(gitReposZip), cred, downloadedFile)
+		downloader.download(new URL(gitReposZip_public), cred, downloadedFile)
 		assertTrue(downloadedFile.exists())
 		assertTrue(downloadedFile.length() > 0)
 	}
 
+	@Test
+	void testDownload_private() {
+		Downloader downloader = new Downloader()
+		Credentials cred = new UsernamePasswordCredentials(GlobalVariable.GithubUsername, GlobalVariable.GithubPassword)
+		Header[] headers = downloader.getAllHeaders(new URL(gitReposZip_private), cred)
+		for (Header h : headers) {
+			println "${h}"
+		}
+		assertNotNull("headers is null", headers)
+		String filename = downloader.getContentDispositionFilename(headers)
+		assertNotNull("filename is null", filename)
+		Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
+		File downloadedFile = downloadsDir.resolve(filename).toFile()
+		downloader.download(new URL(gitReposZip_private), cred, downloadedFile)
+		assertTrue("${downloadedFile} does not exists", downloadedFile.exists())
+		assertTrue("${downloadedFile} has 0 bytes content", downloadedFile.length() > 0)
+		println "#testDownload_private downloaded ${downloadedFile}"
+	}
 }

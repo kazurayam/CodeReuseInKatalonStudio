@@ -19,6 +19,10 @@ import org.apache.http.client.methods.HttpHead
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.impl.client.LaxRedirectStrategy
+import org.junit.After
+import org.apache.http.impl.client.BasicCredentialsProvider
+import org.apache.http.client.CredentialsProvider
+import org.apache.http.auth.AuthScope
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -54,6 +58,24 @@ public class Downloader {
 		}
 	}
 
+	/**
+	 * 
+	 * @param url
+	 * @param credentials
+	 * @return
+	 */
+	private CloseableHttpClient makeHttpClient(URL url, Credentials credentials) {
+		if (url == null) {
+			throw new IllegalArgumentException("url is required")
+		}
+		CredentialsProvider provider = new BasicCredentialsProvider()
+		provider.setCredentials(AuthScope.ANY, credentials);
+		CloseableHttpClient httpclient = HttpClients.custom()
+				.setRedirectStrategy(new LaxRedirectStrategy())
+				.setDefaultCredentialsProvider(provider)
+				.build()
+		return httpclient
+	}
 
 	/**
 	 * 
@@ -61,9 +83,7 @@ public class Downloader {
 	 * @return
 	 */
 	public Header[] getAllHeaders(URL url, Credentials credentials) {
-		CloseableHttpClient httpclient = HttpClients.custom()
-				.setRedirectStrategy(new LaxRedirectStrategy())
-				.build()
+		CloseableHttpClient httpclient = makeHttpClient(url, credentials)		
 		try {
 			HttpHead head = new HttpHead(url.toURI())
 			if (this.requestConfig != null) {
@@ -134,9 +154,7 @@ public class Downloader {
 	 * @return
 	 */
 	public File download(URL url, Credentials credentials, File distributedFile) {
-		CloseableHttpClient httpclient = HttpClients.custom()
-				.setRedirectStrategy(new LaxRedirectStrategy())
-				.build()
+		CloseableHttpClient httpclient = makeHttpClient(url, credentials)
 		try {
 			HttpGet get = new HttpGet(url.toURI())
 			if (this.requestConfig != null) {

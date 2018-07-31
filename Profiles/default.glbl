@@ -6,12 +6,12 @@
    <defaultProfile>true</defaultProfile>
    <GlobalVariableEntity>
       <description></description>
-      <initValue>'foo'</initValue>
-      <name>GitHubUsername</name>
+      <initValue>''</initValue>
+      <name>GithubUsername</name>
    </GlobalVariableEntity>
    <GlobalVariableEntity>
       <description></description>
-      <initValue>'foo'</initValue>
-      <name>GitHubPassword</name>
+      <initValue>''</initValue>
+      <name>GithubPassword</name>
    </GlobalVariableEntity>
 </GlobalVariableEntities>

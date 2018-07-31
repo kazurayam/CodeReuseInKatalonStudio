@@ -18,4 +18,4 @@ tmp/
 
 ## If you want to hide your confidential information,
 ## uncomment the following line
-# /katalon.properties
+katalon.properties
