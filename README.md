@@ -1,6 +1,8 @@
 A custom Katalon Studio keyword: includeCustomKeywords()
 ====
 
+by kazurayam
+
 # What is this?
 
 This is a simple [Katalon Studio](https://www.katalon.com/) project for demonstration purpose.
@@ -38,4 +40,10 @@ If you have a single Web Application and 2 or more people work together to test 
 
 Perfect solution, isn't it?
 
-However, what would happen if your team has multiple Web applications to test and therefore you created multiple Katalon Studio projects? It is quite likely, you want to reuse some artifacts across project border.
+What would happen if your team has multiple Web applications to test and therefore you have created multiple Katalon Studio projects? It is quite likely to happen that you want to reuse some artifacts across projects.
+
+In my humble opinion, among the artifacts of Katalon Studio, only *Custom Keywords* is designed to be portable across projects. All the other types (Test Cases, Test Suites, Test Objects, Test Listeners) are not. I think this design descision is good enough.
+
+Then a simple problem remains unsolved. I do not like to copy local files manually from source project to another one, because it will cause lot of troubles due to human mistakes. I want to automate code reuse processing as much as possible.
+
+This is the reason why I have developed the Groovy class `katalon.codereuse.KeywordTransferer` with the method `@Keyword includeCustomKeywords`.
