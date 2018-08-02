@@ -1,4 +1,4 @@
-package katalon.codesharing
+package katalon.codereuse
 
 import com.kms.katalon.core.configuration.RunConfiguration
 import com.kms.katalon.core.network.ProxyInformation
@@ -42,10 +42,8 @@ public class Downloader {
 
 	private static final Logger logger_ = LoggerFactory.getLogger(Downloader.class)
 
-	static final String version = '0.1'
-
 	static String getVersion() {
-		return this.version
+		return Version.getVersion()
 	}
 
 	// Proxy config

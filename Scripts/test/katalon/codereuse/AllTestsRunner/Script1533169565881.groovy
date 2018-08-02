@@ -1,10 +1,12 @@
+import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
+
 import org.junit.runner.JUnitCore
 import org.junit.runner.Result
-import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
+
 import com.kms.katalon.core.model.FailureHandling
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 
-import codesharing.test.AllTests
+import katalon.codereuse.test.AllTests
 
 /**
  * 

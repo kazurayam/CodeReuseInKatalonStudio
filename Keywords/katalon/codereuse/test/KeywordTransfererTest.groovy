@@ -1,4 +1,4 @@
-package katalon.codesharing.test
+package katalon.codereuse.test
 
 import static org.hamcrest.CoreMatchers.is
 import static org.junit.Assert.assertThat
@@ -9,14 +9,12 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.zip.ZipFile
 
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
-import org.junit.Ignore
-
-import katalon.codesharing.KeywordPortability
-
 import org.apache.commons.io.FileUtils
+import org.junit.BeforeClass
+import org.junit.Ignore
+import org.junit.Test
+
+import katalon.codereuse.KeywordTransferer
 
 
 /**
@@ -25,7 +23,7 @@ import org.apache.commons.io.FileUtils
  *
  */
 
-class KeywordPortabilityTest {
+class KeywordTransfererTest {
 
 	// tag stands for version of artifacts developed by the MyCustomKeywords project
 	static String tagOfMyCustomKeywords = '0.2'
@@ -46,19 +44,19 @@ class KeywordPortabilityTest {
 
 	@Test
 	void testGetVersion() {
-		assertThat(KeywordPortability.getVersion(), is('0.1'))
+		assertThat(KeywordTransferer.getVersion(), is('0.1'))
 	}
 
 	@Test
 	void testUnzip() {
-		List<Path> dirs = KeywordPortability.unzip(new ZipFile(zipFilePath.toFile()), downloadsDir)
+		List<Path> dirs = KeywordTransferer.unzip(new ZipFile(zipFilePath.toFile()), downloadsDir)
 		assertTrue(dirs.size() == 1)
 		assertTrue(Files.exists(unzippedDir))
 	}
 
 	@Test
 	void testIncludeCustomKeywords_public() {
-		KeywordPortability instance = new KeywordPortability()
+		KeywordTransferer instance = new KeywordTransferer()
 		Path destKeywords = Paths.get(System.getProperty('user.dir')).resolve('tmp').resolve('Keywords_testIncludeCustomKeywords_public')
 		FileUtils.deleteDirectory(destKeywords.toFile())
 		instance.includeCustomKeywords(gitReposZip_public, '', '', myPackages, destKeywords)
@@ -68,7 +66,7 @@ class KeywordPortabilityTest {
 	@Ignore
 	@Test
 	void testIncludeCustomKeywords_private() {
-		KeywordPortability instance = new KeywordPortability()
+		KeywordTransferer instance = new KeywordTransferer()
 		Path destKeywords = Paths.get(System.getProperty('user.dir')).resolve('tmp').resolve('Keywords_testIncludeCustomKeywords_private')
 		FileUtils.deleteDirectory(destKeywords.toFile())
 		instance.includeCustomKeywords(gitReposZip_private, '', '', myPackages, destKeywords)
@@ -78,7 +76,7 @@ class KeywordPortabilityTest {
 	@Test
 	void testWhichPackagesToCopy() {
 		def packages = ['com.kazurayam.ksbackyard']
-		List<Path> paths = KeywordPortability.whichPackagesToCopy(packages)
+		List<Path> paths = KeywordTransferer.whichPackagesToCopy(packages)
 		assertThat(paths.size(), is(1))
 		assertThat(paths[0], is(Paths.get('com', 'kazurayam', 'ksbackyard')))
 	}

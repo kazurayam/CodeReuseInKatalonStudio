@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>C%%Users%qcq0264%katalon-workspace%CodeSharingInKatalonStudio%KatalonCodeSharing.prj</name>
+	<name>C%%Users%qcq0264%katalon-workspace%KatalonCodeSharing%CodeReuseInKatalonStudio.prj</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,6 +16,24 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 	<filteredResources>
+		<filter>
+			<id>0</id>
+			<name></name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.core.resources.regexFilterMatcher</id>
+				<arguments>.*\.svn$</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>0</id>
+			<name></name>
+			<type>6</type>
+			<matcher>
+				<id>org.eclipse.core.resources.regexFilterMatcher</id>
+				<arguments>(.*\.svn-base$)|(.*\.png$)|(.*\.log$)|(.*\.xlsx$)|(.*\.xls$)|(.*\.csv$)|(.*\.txt$)</arguments>
+			</matcher>
+		</filter>
 		<filter>
 			<id>0</id>
 			<name></name>

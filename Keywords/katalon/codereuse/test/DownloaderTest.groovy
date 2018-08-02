@@ -1,4 +1,4 @@
-package katalon.codesharing.test
+package katalon.codereuse.test
 
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.not
@@ -8,23 +8,21 @@ import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
 
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
-import org.junit.Ignore
-
-import com.kazurayam.KatalonProperties
-
-import katalon.codesharing.Downloader
-import internal.GlobalVariable
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import org.apache.http.Header
 import org.apache.http.HttpHost
 import org.apache.http.auth.Credentials
 import org.apache.http.auth.UsernamePasswordCredentials
+import org.junit.BeforeClass
+import org.junit.Ignore
+import org.junit.Test
 
-import java.nio.file.Path
-import java.nio.file.Paths
+import com.kazurayam.KatalonProperties
+
+import internal.GlobalVariable
+import katalon.codereuse.Downloader
 
 /**
  *
@@ -84,6 +82,7 @@ class DownloaderTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	void testGetAllHeaders_private() {
 		Downloader downloader = new Downloader()
@@ -109,6 +108,8 @@ class DownloaderTest {
 		println "#testGetHeader_public ${headerName}: ${header.toString()}"
 	}
 
+	
+	@Ignore
 	@Test
 	void testGetHeader_private() {
 		String headerName = 'Content-Disposition'
@@ -133,6 +134,8 @@ class DownloaderTest {
 		assertThat(filename, is('MyCustomKeywords-0.2.zip'))
 	}
 
+	
+	@Ignore
 	@Test
 	void testGetContentDispositionFilename_private() {
 		String headerName = 'Content-Disposition'
@@ -160,6 +163,7 @@ class DownloaderTest {
 	}
 
 
+	@Ignore
 	@Test
 	void testDownload_private() {
 		Downloader downloader = new Downloader()
