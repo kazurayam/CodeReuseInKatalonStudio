@@ -7,12 +7,14 @@ This is a simple [Katalon Studio](https://www.katalon.com/) project for demonstr
 You can check this out onto your PC and execute with your Katalon Studio.
 
 This project provides a Groovy class `katalon.codereuse.KeywordTransferer` which
-implements a method `includeCustomKeywords` with @Keyword annotation. This custom keyword enables you
-to include keywords developed by other Katalon Studio project into your project for code reuse. It downloads distributable zip file from GitHub/BitBucket, extract \*.groovy files out of the zip, and copy them into the `Keywords` directory of your Katalon project.
+implements a method `includeCustomKeywords` with `@Keyword` annotation.
+
+`includeCustomKeywords` enables you
+to include keywords developed by other Katalon Studio project into your project and let you reuse them. `includeCustomKeywords` downloads the distributable zip of a source project file from GitHub/BitBucket, extract \*.groovy files out of the zip, and copy them into the `Keywords` directory of your current Katalon project.
 
 ## Problem to solve
 
-In the [Katalon Forum](https://forum.katalon.com/discussions) I found a few posts asking *how to share artifacts developed in a Katalon Studio project with others*.
+In the [Katalon Forum](https://forum.katalon.com/discussions) I have found several posts asking *how to share artifacts developed in a Katalon Studio project with others*.
 
 1. [Drunda Nibel wants automated code sharing](https://forum.katalon.com/discussion/comment/19738)
 2. [how to create jar libraries from custom keywords](https://forum.katalon.com/discussion/8518/how-to-create-jar-libraries-from-custom-keywords?new=1)
