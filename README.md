@@ -6,13 +6,13 @@ A custom Katalon Studio keyword: includeCustomKeywords()
 This is a simple [Katalon Studio](https://www.katalon.com/) project for demonstration purpose.
 You can check this out onto your PC and execute with your Katalon Studio.
 
-This project provides a Groovy calss `katalon.codereuse.KeywordTransferer` which
-implements a method `includeCustomKeywords` with @Keyword method. This Custom Keyword enables you
-to include Keywords developed by other Katalon Studio project into your project for code reuse.
+This project provides a Groovy class `katalon.codereuse.KeywordTransferer` which
+implements a method `includeCustomKeywords` with @Keyword annotation. This custom keyword enables you
+to include keywords developed by other Katalon Studio project into your project for code reuse. It downloads distributable zip file from GitHub/BitBucket, extract \*.groovy files out of the zip, and copy them into the `Keywords` directory of your Katalon project.
 
 ## Problem to solve
 
-In the [Katalon Forum](https://forum.katalon.com/discussions) found a few posts asking *how to share artifacts developed in a Katalon Studio project with others*.
+In the [Katalon Forum](https://forum.katalon.com/discussions) I found a few posts asking *how to share artifacts developed in a Katalon Studio project with others*.
 
 1. [Drunda Nibel wants automated code sharing](https://forum.katalon.com/discussion/comment/19738)
 2. [how to create jar libraries from custom keywords](https://forum.katalon.com/discussion/8518/how-to-create-jar-libraries-from-custom-keywords?new=1)
@@ -22,7 +22,7 @@ In the [Katalon Forum](https://forum.katalon.com/discussions) found a few posts 
 5. [sharing of test cases](https://forum.katalon.com/discussion/7432/sharing-of-test-cases)
 6. [Is there any way to share test listeners and custom keywords code to multiple projects?](https://forum.katalon.com/discussion/6063/is-there-any-way-to-share-test-listeners-and-custom-keywords-code-to-multiple-projects)
 
-Definition: *artifacts of a Katalon Studio project* include:
+Here I would define a word *artifacts of a Katalon Studio project* includes the following stuff:
 
 - Test Cases
 - Test Suites
@@ -30,5 +30,12 @@ Definition: *artifacts of a Katalon Studio project* include:
 - Custom Keywords
 - Test Listeners
 
-If you have a single Web Application and 2 or more people work together to test it, as Vinh Nguyen mentioned in ["Sharing test cases or keywords to multiple projects"](https://forum.katalon.com/discussion/5343/sharing-test-cases-or-keywords-to-multiple-projects), the best solution is to create a Katalon Studio project and put it into remote Git Repository. In this figure, Alice and Bob share the project X via Git remote repository.
+If you have a single Web Application and 2 or more people work together to test it, then the best solution is to create a Katalon Studio project and put it into remote Git Repository as Vinh Nguyen mentioned in ["Sharing test cases or keywords to multiple projects"](https://forum.katalon.com/discussion/5343/sharing-test-cases-or-keywords-to-multiple-projects).
+
+In the following figure, Alice and Bob share all artifacts of the project X via a Git remote repository.
+
 ![Sharing project by remote Git repository](https://github.com/kazurayam/CodeReuseInKatalonStudio/blob/master/docs/Sharing%20project%20by%20remote%20Git%20repository.png)
+
+No more words necessary I think.
+
+However, what would happen if your team has multiple Web applications to test and therefore you created multiple Katalon Studio projects? It is quite likely, you want to reuse some artifacts across project border.
