@@ -30,12 +30,10 @@ Here I would define a word *artifacts of a Katalon Studio project* includes the 
 - Custom Keywords
 - Test Listeners
 
-If you have a single Web Application and 2 or more people work together to test it, then the best solution is to create a Katalon Studio project and put it into remote Git Repository as Vinh Nguyen mentioned in ["Sharing test cases or keywords to multiple projects"](https://forum.katalon.com/discussion/5343/sharing-test-cases-or-keywords-to-multiple-projects).
-
-In the following figure, Alice and Bob share all artifacts of the project X via a Git remote repository.
+If you have a single Web Application and 2 or more people work together to test it, then the best solution is to create a Katalon Studio project and put it into remote Git Repository as Vinh Nguyen mentioned in ["Sharing test cases or keywords to multiple projects"](https://forum.katalon.com/discussion/5343/sharing-test-cases-or-keywords-to-multiple-projects). In the following figure, Alice and Bob share all artifacts of the project X via a Git remote repository. The project will be fully version-controlled, tagged by Git. The access to the Remote repository will be well administrated by the hosting services (GitHub, BitBucket etc)
 
 ![Sharing project by remote Git repository](https://github.com/kazurayam/CodeReuseInKatalonStudio/blob/master/docs/Sharing%20project%20by%20remote%20Git%20repository.png)
 
-No more words necessary I think.
+Perfect solution, isn't it?
 
 However, what would happen if your team has multiple Web applications to test and therefore you created multiple Katalon Studio projects? It is quite likely, you want to reuse some artifacts across project border.
