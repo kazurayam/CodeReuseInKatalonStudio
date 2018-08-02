@@ -45,3 +45,5 @@ What would happen if your team has multiple Web applications to test and therefo
 But A simple problem remains unsolved. I do not like to copy \*.groovy files in the `Keywords` folder manually from source project to another. Too easy to make mistakes. I want to my code reuse well-tested and automated as much as possible. This is the reason why I have developed the Groovy class `katalon.codereuse.KeywordTransferer` with the method `@Keyword includeCustomKeywords`.
 
 ## How it works
+
+![Reusing Custom Keywords across projects](https://github.com/kazurayam/CodeReuseInKatalonStudio/blob/master/docs/Reusing%20Custom%20Keywords%20across%20projects.png)
