@@ -40,10 +40,30 @@ If you have a single Web Application and 2 or more people work together to test 
 
 Perfect solution, isn't it?
 
-What would happen if your team has multiple Web applications to test and therefore you have created multiple Katalon Studio projects? It is quite likely, you would want to reuse some artifacts across projects. In my humble opinion, among the artifacts of Katalon Studio, only *Custom Keywords* is designed to be portable across projects. All the other types (Test Cases, Test Suites, Test Objects, Test Listeners) are not. I think this design descision is reasonable. I would be happy if I safely reuse my custom keywords across Katalon projects.
+However, what would happen if your team has multiple Web applications to test and therefore you have created 2 or more Katalon Studio projects? It is quite likely, you would want to reuse some artifacts across projects.
 
-But A simple problem remains unsolved. I do not like to copy \*.groovy files in the `Keywords` folder manually from source project to another. Too easy to make mistakes. I want to my code reuse well-tested and automated as much as possible. This is the reason why I have developed the Groovy class `katalon.codereuse.KeywordTransferer` with the method `@Keyword includeCustomKeywords`.
+In my humble opinion, among the types of test artifacts in Katalon Studio, only *Custom Keywords* is designed to be portable across projects. All the other types (Test Cases, Test Suites, Test Objects, Test Listeners) are not. I would not discuss this point here. I think this design decision is reasonable. I would be happy if I safely reuse my custom keywords across projects.
 
-## How it works
+But A simple problem remains unsolved. I do not like to copy \*.groovy files in the `Keywords` folder *manually* from source project to another. It is too easy to make mistakes. I want a automated and well-tested method of transferring Keywords. This is the reason why I have developed the Groovy class `katalon.codereuse.KeywordTransferer` with the method `@Keyword includeCustomKeywords`.
+
+## How `katalon.codereuse.KeywordTransferer#includeCustomKeywords()` works
 
 ![Reusing Custom Keywords across projects](https://github.com/kazurayam/CodeReuseInKatalonStudio/blob/master/docs/Reusing%20Custom%20Keywords%20across%20projects.png)
+
+## How you should use `katalon.codereuse.KeywordTransferer#includeCustomKeywords()` in your Katalon project
+
+Please read the readme of [CodeReuseInKatalonStudio-demo](https://github.com/kazurayam/CodeReuseInKatalonStudio-demo)
+
+## Outstanding issues
+
+### in Ver 0.1
+
+1. I have tested `katalon.codereuse.KeywordTransferer` only for the [MyCustomKeywords](https://github.com/kazurayam/MyCustomKeywords) repository which is public on GitHub.
+2. I haven't checked for a private repository protected by username/password authentication.
+2. I haven't checked for other Git repository hosting service such as [BitBucket](https://bitbucket.org/) and [GitLab](https://about.gitlab.com/)
+
+# This project no more necessary!
+
+2018/08/03
+
+Katalon Studio Ver5.5 supported a feature ["Import/Export Keywords"](https://docs.katalon.com/pages/viewpage.action?pageId=13698840). *I was not aware of it*. My project 'CodeReuseInKatalonStudio' totally duplicates with it. I have re-invented a wheel. This project is no more necessary. I would leave it as it is.
